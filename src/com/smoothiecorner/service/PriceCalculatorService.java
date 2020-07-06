@@ -1,8 +1,8 @@
 package com.smoothiecorner.service;
 
-import com.smoothiecorner.order.CustomizedMenuItem;
-import com.smoothiecorner.common.IngredientEnum;
-import com.smoothiecorner.order.Order;
+import com.smoothiecorner.model.CustomizedMenuItem;
+import com.smoothiecorner.model.Ingredient;
+import com.smoothiecorner.model.Order;
 
 import java.util.Set;
 
@@ -23,7 +23,10 @@ public class PriceCalculatorService {
             return 0;
         }
 
-        return order.getMenuItemList().stream().mapToDouble(this::getPrice).sum();
+        return order.getMenuItemList()
+                .stream()
+                .mapToDouble(this::getPrice)
+                .sum();
     }
 
     public double getPrice(CustomizedMenuItem menuItem) {
@@ -32,13 +35,12 @@ public class PriceCalculatorService {
         }
 
         return menuItem.getMenuItem().getPrice() - getPriceForIngredient(menuItem.getRemovedIngredients());
-
     }
 
-    private double getPriceForIngredient(Set<IngredientEnum> ingredientEnums) {
-        if (ingredientEnums.size() == 0) {
+    private double getPriceForIngredient(Set<Ingredient> ingredients) {
+        if (ingredients.size() == 0) {
             return 0;
         }
-        return ingredientEnums.stream().mapToDouble(IngredientEnum::getPrice).sum();
+        return ingredients.stream().mapToDouble(Ingredient::getPrice).sum();
     }
 }

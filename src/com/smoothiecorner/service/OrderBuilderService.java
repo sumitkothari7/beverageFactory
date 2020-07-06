@@ -1,14 +1,15 @@
 package com.smoothiecorner.service;
 
+import com.smoothiecorner.MenuCard;
 import com.smoothiecorner.common.Constants;
 import com.smoothiecorner.exception.IngredientNotFoundException;
 import com.smoothiecorner.exception.InvalidOrderException;
 import com.smoothiecorner.exception.MenuItemNotFoundException;
-import com.smoothiecorner.order.CustomizedMenuItem;
-import com.smoothiecorner.common.IngredientEnum;
-import com.smoothiecorner.menu.MenuItem;
-import com.smoothiecorner.menu.MenuItemFactory;
-import com.smoothiecorner.order.Order;
+import com.smoothiecorner.menu.MenuItemFetcher;
+import com.smoothiecorner.model.CustomizedMenuItem;
+import com.smoothiecorner.model.Ingredient;
+import com.smoothiecorner.model.MenuItem;
+import com.smoothiecorner.model.Order;
 
 public class OrderBuilderService {
 
@@ -53,7 +54,7 @@ public class OrderBuilderService {
         if (customizedMenuItem == null) {
             throw new MenuItemNotFoundException();
         }
-        IngredientEnum e = IngredientEnum.getIngredientByName(orderString.substring(1));
+        Ingredient e = MenuCard.getIngredientByName(orderString.substring(1));
         if (e == null) {
             throw new IngredientNotFoundException();
         }
@@ -63,7 +64,10 @@ public class OrderBuilderService {
     private CustomizedMenuItem getCustomizedMenuItem(Order order,
                                                      String orderString) throws MenuItemNotFoundException {
         CustomizedMenuItem customizedMenuItem;
-        MenuItem menuItem = MenuItemFactory.getMenuItem(orderString);
+        MenuItem menuItem = MenuItemFetcher.getMenuItem(orderString);
+        if (menuItem == null) {
+            throw new MenuItemNotFoundException();
+        }
         customizedMenuItem = new CustomizedMenuItem(menuItem);
         order.addMenuItem(customizedMenuItem);
         return customizedMenuItem;

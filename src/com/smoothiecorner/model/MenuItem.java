@@ -1,4 +1,4 @@
-package com.smoothiecorner.menu;
+package com.smoothiecorner.model;
 
 import java.util.List;
 
@@ -37,10 +37,4 @@ public class MenuItem {
         return ingredients;
     }
 
-    public Ingredient getMandatoryIngredient() {
-        if (getIngredients() != null && getIngredients().size() > 0) {
-            return getIngredients().stream().filter(ing -> ing.isMandatory()).findFirst().orElse(null);
-        }
-        return null;
-    }
 }

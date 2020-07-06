@@ -1,5 +1,7 @@
 package com.smoothiecorner;
 
+import com.smoothiecorner.cli.Command;
+import com.smoothiecorner.cli.CommandFactory;
 import com.smoothiecorner.exception.IngredientNotFoundException;
 import com.smoothiecorner.exception.InvalidOrderException;
 import com.smoothiecorner.exception.MenuItemNotFoundException;
@@ -20,13 +22,11 @@ public class Main {
         String order = scanner.nextLine();
 
         while (!"exit".equalsIgnoreCase(order)) {
-            if ("menu".equalsIgnoreCase(order)) {
-                printMenu();
-            } else {
-                OrderProcessor processor = new OrderProcessor();
+            order = order.toLowerCase();
+            Command command = CommandFactory.getCommand(order);
+            if (command != null) {
                 try {
-                    double orderAmount = processor.processOrder(order);
-                    System.out.println("Order amount is :: " + orderAmount);
+                    command.execute(order);
                 } catch (InvalidOrderException e) {
                     System.out.println(" Your order is invalid");
                 } catch (MenuItemNotFoundException e) {
@@ -34,13 +34,15 @@ public class Main {
                 } catch (IngredientNotFoundException e) {
                     System.out.println("Ingredient not available");
                 }
+            } else {
+                System.out.println("Invalid command");
             }
             order = scanner.nextLine();
         }
         scanner.close();
     }
 
-    private static void printMenu() {
+    public static void printMenu() {
         System.out.println("********* Menu ***********");
         System.out.println("1. coffee (coffee, sugar, milk, water)  : $5.0");
         System.out.println("2. chai (tea, sugar, milk, water)  : $4.0");

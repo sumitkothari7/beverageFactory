@@ -43,7 +43,7 @@ public class OrderProcessorTest {
         processor.processOrder("-sugar coffee");
     }
 
-    @Test(expected = InvalidOrderException.class)
+    @Test(expected = IngredientNotFoundException.class)
     public void test_buildOrder_ToThrowException_whenMandatoryIngredientIsRemoved() throws Exception {
         processor.processOrder("coffee -coffee");
     }
@@ -80,7 +80,7 @@ public class OrderProcessorTest {
     @Test
     public void test_buildOrder_ToGerOrderAmount_whenCoffeeChaiBananaStrawberryMojitoOrderPlaced() throws Exception {
         Assert.assertEquals("Order Amount tally",
-                29.5, processor.processOrder("coffee chai BananaSmoothie StrawberryShake Mojito"), 0);
+                29.5, processor.processOrder("coffee chai bananaSmoothie strawberryShake mojito"), 0);
     }
 
     @Test
